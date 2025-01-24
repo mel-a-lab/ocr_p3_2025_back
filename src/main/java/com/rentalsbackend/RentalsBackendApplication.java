@@ -1,4 +1,4 @@
-package rentalsbackend;
+package com.rentalsbackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
