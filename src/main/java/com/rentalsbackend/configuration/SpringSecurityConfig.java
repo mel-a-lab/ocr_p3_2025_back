@@ -35,22 +35,22 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register").permitAll()
-                        .anyRequest().authenticated()
+                        //.requestMatchers("/register").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
 
-    @Bean
-    public UserDetailsService users() {
-        UserDetails user = User.builder()
-                .username("test@test.com")
-                .password(passwordEncoder().encode("test!31"))
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
+    //@Bean
+    //public UserDetailsService users() {
+    //    UserDetails user = User.builder()
+    //            .username("test@test.com")
+    //            .password(passwordEncoder().encode("test!31"))
+    //            .roles("USER")
+    //            .build();
+    //    return new InMemoryUserDetailsManager(user);
+    //}
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

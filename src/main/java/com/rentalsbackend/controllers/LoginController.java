@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/auth")
 public class LoginController {
 
     private final UserService userService;
@@ -16,6 +17,8 @@ public class LoginController {
     public LoginController(UserService userService) {
         this.userService = userService;
     }
+
+
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {

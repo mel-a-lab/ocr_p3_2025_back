@@ -2,15 +2,13 @@ package com.rentalsbackend.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Data
 public class RegisterRequest {
     @NotBlank(message = "Le nom est obligatoire")
     private String name;
