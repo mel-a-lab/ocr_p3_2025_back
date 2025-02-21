@@ -1,5 +1,7 @@
 package com.rentalsbackend.controllers;
 
+import com.rentalsbackend.dto.LoginRequest;
+import com.rentalsbackend.dto.LoginResponse;
 import com.rentalsbackend.dto.RegisterRequest;
 import com.rentalsbackend.dto.RegisterResponse;
 import com.rentalsbackend.services.UserService;
@@ -32,4 +34,27 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        if (loginRequest.getEmail() == null || loginRequest.getPassword() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        LoginResponse response = userService.loginUser(loginRequest);
+
+        if (response.getToken() == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
+
 }
+
+
+
+
+
