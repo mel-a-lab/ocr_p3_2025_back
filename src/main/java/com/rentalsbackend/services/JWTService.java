@@ -3,6 +3,8 @@ package com.rentalsbackend.services;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+
+import com.rentalsbackend.dto.LoginRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;

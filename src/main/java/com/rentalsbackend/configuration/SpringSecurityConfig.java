@@ -34,15 +34,19 @@ public class SpringSecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/register").permitAll() //
+                        .anyRequest().authenticated()
+                )
                 .build();
     }
 
+
     @Bean
     public UserDetailsService users() {
-        UserDetails user = User.builder().username("user").password(passwordEncoder().encode("password")).roles("USER")
+        UserDetails user = User.builder().username("test@test.com").password(passwordEncoder().encode("test!31")).roles("USER")
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
@@ -68,6 +72,8 @@ public class SpringSecurityConfig {
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
     }
+
+    // créer un objet login response et
 
 
 }

@@ -1,0 +1,15 @@
+package com.rentalsbackend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class RegisterResponse {
+    private String message;
+    private String token;
+}
