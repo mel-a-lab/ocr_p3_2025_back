@@ -1,48 +1,32 @@
 package com.rentalsbackend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Size(max = 255)
-    @Column(name = "email")
-    private String email;
-
-    @Size(max = 255)
-    @Column(name = "name")
     private String name;
-
-    @Size(max = 255)
-    @Column(name = "password")
+    private String email;
     private String password;
 
-    @NotNull
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    @CreationTimestamp // Génère automatiquement la date de création
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @NotNull
-    @ColumnDefault("'0000-00-00 00:00:00'")
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
-
+    @UpdateTimestamp // Met à jour automatiquement la date à chaque modification
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }

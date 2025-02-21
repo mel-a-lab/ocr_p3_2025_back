@@ -1,36 +1,35 @@
 package com.rentalsbackend.controllers;
 
-
-import com.rentalsbackend.dto.LoginRequest;
 import com.rentalsbackend.dto.RegisterRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import com.rentalsbackend.services.JWTService;
-
+import com.rentalsbackend.dto.RegisterResponse;
+import com.rentalsbackend.services.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class LoginController {
 
+    private final UserService userService;
 
-    private JWTService jwtService;
-
-    public LoginController(JWTService jwtService) {
-        this.jwtService = jwtService;
-    }
-
-    @PostMapping("/login")
-    public String getToken(@RequestBody LoginRequest loginRequest, Authentication authentication) {
-        String token = jwtService.generateToken(authentication);
-        return token;
+    public LoginController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/register")
-    public RegisterRequest register(@RequestBody RegisterRequest registerRequest) {
-        return registerRequest;
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
+
+        if (registerRequest.getName() == null || registerRequest.getEmail() == null || registerRequest.getPassword() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+
+        RegisterResponse response = userService.registerUser(registerRequest);
+
+        if (response.getToken() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 
 }
