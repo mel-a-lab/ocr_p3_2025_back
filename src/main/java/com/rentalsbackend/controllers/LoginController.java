@@ -19,14 +19,14 @@ public class LoginController {
     }
 
 
-
+    
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
 
-        if (registerRequest.getName() == null || registerRequest.getEmail() == null || registerRequest.getPassword() == null) {
+        if (registerRequest.getName() == null || registerRequest.getEmail() == null
+                || registerRequest.getPassword() == null) {
             return ResponseEntity.badRequest().build();
         }
-
 
         RegisterResponse response = userService.registerUser(registerRequest);
 
@@ -52,12 +52,4 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-
-
-
 }
-
-
-
-
-
