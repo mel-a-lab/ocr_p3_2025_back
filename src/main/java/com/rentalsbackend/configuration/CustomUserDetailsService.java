@@ -3,7 +3,7 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.userdetails.*;
 //import org.springframework.stereotype.Service;
-//import com.rentalsbackend.repository.UserRepository;
+//import com.rentalsbackend.rzepository.UserRepository;
 //import com.rentalsbackend.entity.User;
 //
 //import java.util.Collections;

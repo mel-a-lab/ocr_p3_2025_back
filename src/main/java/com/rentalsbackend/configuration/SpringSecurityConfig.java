@@ -28,15 +28,16 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 public class SpringSecurityConfig {
 
+    private static final String[] AUTH_WHITELIST = {"/api/auth/login", "/api/auth/register","/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"};
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(Customizer.withDefaults())
+              //  .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers("/register").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
