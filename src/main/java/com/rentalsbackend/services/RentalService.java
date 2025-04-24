@@ -1,0 +1,78 @@
+package com.rentalsbackend.services;
+
+import com.rentalsbackend.dto.RentalRequest;
+import com.rentalsbackend.dto.RentalResponse;
+import com.rentalsbackend.entity.Rental;
+import com.rentalsbackend.repository.RentalRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class RentalService {
+
+    private final RentalRepository rentalRepository;
+
+    public RentalService(RentalRepository rentalRepository) {
+        this.rentalRepository = rentalRepository;
+    }
+
+    public List<RentalResponse> findAll() {
+        return rentalRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    public Optional<RentalResponse> findById(Integer id) {
+        return rentalRepository.findById(id)
+                .map(this::mapToResponse);
+    }
+
+    public RentalResponse create(RentalRequest request) {
+        Rental rental = new Rental();
+        rental.setName(request.getName());
+        rental.setSurface(request.getSurface());
+        rental.setPrice(request.getPrice());
+        rental.setPicture(request.getPicture());
+        rental.setDescription(request.getDescription());
+        rental.setCreatedAt(Instant.now());
+        rental.setUpdatedAt(Instant.now());
+
+        return mapToResponse(rentalRepository.save(rental));
+    }
+
+    public Optional<RentalResponse> update(Integer id, RentalRequest request) {
+        return rentalRepository.findById(id).map(rental -> {
+            rental.setName(request.getName());
+            rental.setSurface(request.getSurface());
+            rental.setPrice(request.getPrice());
+            rental.setPicture(request.getPicture());
+            rental.setDescription(request.getDescription());
+            rental.setUpdatedAt(Instant.now());
+            return mapToResponse(rentalRepository.save(rental));
+        });
+    }
+
+    public boolean delete(Integer id) {
+        return rentalRepository.findById(id).map(rental -> {
+            rentalRepository.delete(rental);
+            return true;
+        }).orElse(false);
+    }
+
+    private RentalResponse mapToResponse(Rental rental) {
+        return new RentalResponse(
+                rental.getId(),
+                rental.getName(),
+                rental.getSurface(),
+                rental.getPrice(),
+                rental.getPicture(),
+                rental.getDescription(),
+                rental.getCreatedAt(),
+                rental.getUpdatedAt()
+        );
+    }
+}
