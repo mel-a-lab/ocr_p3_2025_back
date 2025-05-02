@@ -2,6 +2,8 @@ package com.rentalsbackend.controllers;
 
 import com.rentalsbackend.dto.MessageRequest;
 import com.rentalsbackend.entity.Message;
+import com.rentalsbackend.errors.exceptions.BadRequestException;
+import com.rentalsbackend.errors.exceptions.UnauthorizedException;
 import com.rentalsbackend.repository.MessageRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,19 +23,18 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<?> sendMessage(
+    public ResponseEntity<Map<String, String>> sendMessage(
             @RequestBody MessageRequest messageRequest,
             Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body(Map.of("message", "Unauthorized"));
+            throw new UnauthorizedException("Utilisateur non authentifié");
         }
 
         if (messageRequest.getContent() == null || messageRequest.getContent().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Content cannot be empty"));
+            throw new BadRequestException("Le contenu du message ne peut pas être vide");
         }
 
-        // Sauvegarde du message
         Message message = new Message();
         message.setMessage(messageRequest.getContent());
         message.setCreatedAt(Instant.now());
@@ -41,6 +42,6 @@ public class MessageController {
 
         messageRepository.save(message);
 
-        return ResponseEntity.ok(Map.of("message", "Message send with success"));
+        return ResponseEntity.ok(Map.of("message", "Message envoyé avec succès"));
     }
 }
