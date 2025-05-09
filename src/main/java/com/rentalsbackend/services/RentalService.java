@@ -3,6 +3,7 @@ package com.rentalsbackend.services;
 import com.rentalsbackend.dto.RentalRequest;
 import com.rentalsbackend.dto.RentalResponse;
 import com.rentalsbackend.entity.Rental;
+import com.rentalsbackend.errors.exceptions.ResourceNotFoundException;
 import com.rentalsbackend.repository.RentalRepository;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +73,34 @@ public class RentalService {
                 rental.getPicture(),
                 rental.getDescription(),
                 rental.getCreatedAt(),
-                rental.getUpdatedAt()
-        );
+                rental.getUpdatedAt());
     }
+
+    public void updateOrFail(Integer id, RentalRequest request) {
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental with ID " + id + " not found"));
+
+        rental.setName(request.getName());
+        rental.setSurface(request.getSurface());
+        rental.setPrice(request.getPrice());
+        rental.setPicture(request.getPicture());
+        rental.setDescription(request.getDescription());
+        rental.setUpdatedAt(Instant.now());
+
+        rentalRepository.save(rental);
+    }
+
+    public RentalResponse findByIdOrFail(Integer id) {
+        return rentalRepository.findById(id)
+                .map(this::mapToResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental with ID " + id + " not found"));
+    }
+
+    public void deleteOrFail(Integer id) {
+        Rental rental = rentalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rental with ID " + id + " not found"));
+        rentalRepository.delete(rental);
+    }
+    
+
 }

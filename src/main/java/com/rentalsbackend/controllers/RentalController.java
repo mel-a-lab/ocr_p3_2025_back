@@ -28,10 +28,10 @@ public class RentalController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RentalResponse> getRentalById(@PathVariable Integer id) {
-        return rentalService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException("Rental with ID " + id + " not found"));
+        RentalResponse rental = rentalService.findByIdOrFail(id);
+        return ResponseEntity.ok(rental);
     }
+
     // pareil ici retirer la logique pour getRentalById
 
     @PostMapping
@@ -41,18 +41,23 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RentalResponse> updateRental(@PathVariable Integer id, @RequestBody @Valid RentalRequest rentalRequest) {
-        return rentalService.update(id, rentalRequest)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException("Rental with ID " + id + " not found"));
+    public ResponseEntity<RentalResponse> updateRental(@PathVariable Integer id,
+            @RequestBody @Valid RentalRequest rentalRequest) {
+        rentalService.updateOrFail(id, rentalRequest); // s’il échoue, il lance une exception
+        return ResponseEntity.noContent().build();
     }
 
-    // retirer la logique dans updateRental (retourner ResponseEntityNoContent), mettre
+    // retirer la logique dans updateRental (retourner ResponseEntityNoContent),
+    // mettre
     // en paramètre l'objet qui est mis à jour
+    // => fait
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRental(@PathVariable Integer id) {
-        rentalService.delete(id);
-        return new ResponseEntity<Void>( HttpStatus.OK );
+        rentalService.deleteOrFail(id);
+        return ResponseEntity.noContent().build();
     }
+
+    // => fait
+
 }
