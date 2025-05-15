@@ -80,6 +80,7 @@ import com.rentalsbackend.dto.LoginRequest;
 import com.rentalsbackend.dto.LoginResponse;
 import com.rentalsbackend.dto.RegisterRequest;
 import com.rentalsbackend.dto.RegisterResponse;
+import com.rentalsbackend.dto.UserResponse;
 import com.rentalsbackend.entity.User;
 import com.rentalsbackend.errors.exceptions.BadRequestException;
 import com.rentalsbackend.errors.exceptions.UnauthorizedException;
@@ -94,6 +95,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -144,6 +146,20 @@ public class UserService {
         return new LoginResponse(token);
     }
 
+    public UserResponse findUserByName(String username) {
+        Optional<User> user = userRepository.findByEmail(username);
+        if (user.isPresent()) {
+            UserResponse userResponse = new UserResponse();
+            userResponse.setId(user.get().getId());
+            userResponse.setEmail(user.get().getEmail());
+            userResponse.setName(user.get().getName());
+            userResponse.setCreated_at(user.get().getCreatedAt());
+            userResponse.setUpdated_at(user.get().getUpdatedAt());
+            return userResponse;
+        }
+        return null;
+    }
+
     private String generateToken(String subject) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -158,6 +174,3 @@ public class UserService {
                 claims)).getTokenValue();
     }
 }
-
-
-

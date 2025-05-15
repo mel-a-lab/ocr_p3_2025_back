@@ -1,6 +1,7 @@
 package com.rentalsbackend.controllers;
 
 import com.rentalsbackend.dto.MessageRequest;
+import com.rentalsbackend.dto.MessageResponse;
 import com.rentalsbackend.entity.Message;
 import com.rentalsbackend.errors.exceptions.BadRequestException;
 import com.rentalsbackend.errors.exceptions.UnauthorizedException;
@@ -64,7 +65,10 @@ public class MessageController {
             throw new UnauthorizedException("Utilisateur non authentifié");
         }
 
-        messageService.sendMessage(messageRequest);
-        return ResponseEntity.noContent().build();
+        MessageResponse messageResponse = messageService.sendMessage(messageRequest);
+        return ResponseEntity.ok(messageResponse);
     }
+
+
+
 }

@@ -4,8 +4,10 @@ import com.rentalsbackend.dto.LoginRequest;
 import com.rentalsbackend.dto.LoginResponse;
 import com.rentalsbackend.dto.RegisterRequest;
 import com.rentalsbackend.dto.RegisterResponse;
+import com.rentalsbackend.dto.UserResponse;
 import com.rentalsbackend.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 // @RestController
@@ -73,4 +75,13 @@ public class LoginController {
         LoginResponse response = userService.loginUser(loginRequest);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping(value = "/me")
+    public ResponseEntity<UserResponse> currentUserName(Authentication authentication) {
+
+        String username = authentication.getName();
+        UserResponse response = userService.findUserByName(username);
+        return ResponseEntity.ok(response);
+    }
+    
 }
