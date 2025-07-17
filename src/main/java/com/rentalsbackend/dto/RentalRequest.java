@@ -3,6 +3,7 @@ package com.rentalsbackend.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -23,7 +24,7 @@ public class RentalRequest {
     private BigDecimal price;
 
     @NotBlank(message = "L'URL de l'image est obligatoire")
-    private String picture;
+    private MultipartFile picture;
 
     @NotBlank(message = "La description est obligatoire")
     private String description;

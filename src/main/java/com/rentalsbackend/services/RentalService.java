@@ -6,6 +6,7 @@ import com.rentalsbackend.entity.Rental;
 import com.rentalsbackend.errors.exceptions.ResourceNotFoundException;
 import com.rentalsbackend.repository.RentalRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.List;
@@ -15,9 +16,11 @@ import java.util.Optional;
 public class RentalService {
 
     private final RentalRepository rentalRepository;
+    private final CloudinaryPictureService cloudinaryPictureService;
 
-    public RentalService(RentalRepository rentalRepository) {
+    public RentalService(RentalRepository rentalRepository, CloudinaryPictureService cloudinaryPictureService) {
         this.rentalRepository = rentalRepository;
+        this.cloudinaryPictureService = cloudinaryPictureService;
     }
 
     public List<RentalResponse> findAll() {
@@ -37,10 +40,14 @@ public class RentalService {
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
         rental.setPrice(request.getPrice());
-        rental.setPicture(request.getPicture());
         rental.setDescription(request.getDescription());
         rental.setCreatedAt(Instant.now());
         rental.setUpdatedAt(Instant.now());
+
+        MultipartFile file = request.getPicture();
+        String imageUrl = cloudinaryPictureService.uploadFile(file, "rentals");
+
+        rental.setPicture(imageUrl);
 
         return mapToResponse(rentalRepository.save(rental));
     }
@@ -50,7 +57,12 @@ public class RentalService {
             rental.setName(request.getName());
             rental.setSurface(request.getSurface());
             rental.setPrice(request.getPrice());
-            rental.setPicture(request.getPicture());
+
+            MultipartFile file = request.getPicture();
+            String imageUrl = cloudinaryPictureService.uploadFile(file, "rentals");
+
+            rental.setPicture(imageUrl);
+
             rental.setDescription(request.getDescription());
             rental.setUpdatedAt(Instant.now());
             return mapToResponse(rentalRepository.save(rental));
@@ -83,7 +95,10 @@ public class RentalService {
         rental.setName(request.getName());
         rental.setSurface(request.getSurface());
         rental.setPrice(request.getPrice());
-        rental.setPicture(request.getPicture());
+        MultipartFile file = request.getPicture();
+        String imageUrl = cloudinaryPictureService.uploadFile(file, "rentals");
+
+        rental.setPicture(imageUrl);
         rental.setDescription(request.getDescription());
         rental.setUpdatedAt(Instant.now());
 
