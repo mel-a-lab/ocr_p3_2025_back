@@ -21,3 +21,4 @@ public class RentalResponse {
     private Instant createdAt;
     private Instant updatedAt;
 }
+

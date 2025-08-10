@@ -23,7 +23,7 @@ public class RentalRequest {
     @NotNull(message = "Le prix est obligatoire")
     private BigDecimal price;
 
-    @NotBlank(message = "L'URL de l'image est obligatoire")
+    @NotNull(message = "L'URL de l'image est obligatoire")
     private MultipartFile picture;
 
     @NotBlank(message = "La description est obligatoire")

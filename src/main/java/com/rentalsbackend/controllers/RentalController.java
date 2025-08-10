@@ -2,6 +2,7 @@ package com.rentalsbackend.controllers;
 
 import com.rentalsbackend.dto.RentalRequest;
 import com.rentalsbackend.dto.RentalResponse;
+import com.rentalsbackend.dto.RentalsResponse;
 import com.rentalsbackend.errors.exceptions.ResourceNotFoundException;
 import com.rentalsbackend.services.RentalService;
 import jakarta.validation.Valid;
@@ -22,8 +23,9 @@ public class RentalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RentalResponse>> getAllRentals() {
-        return ResponseEntity.ok(rentalService.findAll());
+    public ResponseEntity<RentalsResponse> getAllRentals() {
+        return ResponseEntity.ok(new RentalsResponse(rentalService.findAll()));
+
     }
 
     @GetMapping("/{id}")
@@ -35,14 +37,14 @@ public class RentalController {
     // pareil ici retirer la logique pour getRentalById
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<RentalResponse> createRental(@RequestBody @Valid RentalRequest rentalRequest) {
+    public ResponseEntity<RentalResponse> createRental(@ModelAttribute @Valid RentalRequest rentalRequest) {
         RentalResponse created = rentalService.create(rentalRequest);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<RentalResponse> updateRental(@PathVariable Integer id,
-            @RequestBody @Valid RentalRequest rentalRequest) {
+            @ModelAttribute @Valid RentalRequest rentalRequest) {
         rentalService.updateOrFail(id, rentalRequest); // s’il échoue, il lance une exception
         return ResponseEntity.noContent().build();
     }
