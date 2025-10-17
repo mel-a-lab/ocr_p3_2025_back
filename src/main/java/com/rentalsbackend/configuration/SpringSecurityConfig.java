@@ -34,7 +34,6 @@ public class SpringSecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-              //  .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
@@ -43,15 +42,7 @@ public class SpringSecurityConfig {
                 .build();
     }
 
-    //@Bean
-    //public UserDetailsService users() {
-    //    UserDetails user = User.builder()
-    //            .username("test@test.com")
-    //            .password(passwordEncoder().encode("test!31"))
-    //            .roles("USER")
-    //            .build();
-    //    return new InMemoryUserDetailsManager(user);
-    //}
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

@@ -34,7 +34,6 @@ public class RentalController {
         return ResponseEntity.ok(rental);
     }
 
-    // pareil ici retirer la logique pour getRentalById
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<RentalResponse> createRental(@ModelAttribute @Valid RentalRequest rentalRequest) {
